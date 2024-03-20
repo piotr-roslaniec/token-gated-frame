@@ -4,12 +4,13 @@ import { ImageResponse } from "@vercel/og";
 
 export async function GET(
   request: Request,
-  { params }: { params: { message: string } }
+  { params }: { params: { message: string } },
 ) {
+  console.log("GET /api/og", { params });
   const u = new URL(request.url);
   let content = "";
   if (u.searchParams.get("state") === "no-wallet") {
-    content = "Please link your farcaster account to a wallet!";
+    content = "Please link your Farcaster account to a wallet!";
   } else {
     const message = await getMessage(params.message);
     if (!message) {

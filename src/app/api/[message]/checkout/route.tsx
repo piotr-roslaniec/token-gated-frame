@@ -3,8 +3,9 @@ import { getMessage } from "@/lib/messages";
 
 export async function POST(
   request: Request,
-  { params }: { params: { message: string } }
+  { params }: { params: { message: string } },
 ) {
+  console.log("POST /api/[message]/checkout", { params });
   const body = await request.json();
   const { trustedData } = body;
 
@@ -20,7 +21,7 @@ export async function POST(
   try {
     // Get the message URL so we can then redirect to it!
     const posterProfile = await getUserProfile(
-      fcMessage.message.data.frameActionBody?.castId?.fid
+      fcMessage.message.data.frameActionBody?.castId?.fid,
     );
     const userName = posterProfile.messages
       .sort((a: any, b: any) => a.data.timestamp > b.data.timestamp)
@@ -32,15 +33,15 @@ export async function POST(
       }).data.userDataBody.value;
     checkoutRedirect.searchParams.append(
       "cast",
-      `https://warpcast.com/${userName}/${fcMessage.message.data.frameActionBody?.castId.hash}`
+      `https://warpcast.com/${userName}/${fcMessage.message.data.frameActionBody?.castId.hash}`,
     );
   } catch (error) {
     console.error(
       `Could not build the redirect URL for ${JSON.stringify(
         fcMessage.message.data,
         null,
-        2
-      )}`
+        2,
+      )}`,
     );
     console.error(error);
   }
@@ -49,7 +50,7 @@ export async function POST(
 
 export async function GET(
   request: Request,
-  { params }: { params: { message: string } }
+  { params }: { params: { message: string } },
 ) {
   const message = await getMessage(params.message);
   if (!message) {

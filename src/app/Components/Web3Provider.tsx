@@ -36,7 +36,7 @@ const config = createConfig(
     // Optional App Info
     appDescription: AppConfig.description,
     appUrl: AppConfig.siteUrl, // your app's url
-  })
+  }),
 );
 
 const queryClient = new QueryClient();

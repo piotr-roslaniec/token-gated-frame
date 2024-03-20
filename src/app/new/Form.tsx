@@ -7,6 +7,7 @@ import { useAccount } from "wagmi";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { CHAIN_ID, LOCK_NFT_ADDR } from "@/config";
 
 export const Form = () => {
   const [showTokenId, setShowTokenId] = useState(false);
@@ -46,6 +47,7 @@ export const Form = () => {
               className="textarea textarea-bordered "
               placeholder="Want to see more? Click the reveal button below ⬇️"
               name="frame.description"
+              defaultValue="Public part of the frame."
               required
             />
             <small className="text-slate-500">
@@ -58,7 +60,8 @@ export const Form = () => {
             <textarea
               className="textarea textarea-bordered "
               placeholder="Now you know the secret! 🤫🔓🎉"
-              name="frame.body"
+              name="frame.body" // TODO: Decrypt this with TACo
+              defaultValue="Hidden part of the frame."
               required
             />
             <small className="text-slate-500">
@@ -73,6 +76,7 @@ export const Form = () => {
               className="textarea textarea-bordered "
               placeholder="Sorry, you don't meet the requirements to see this content. 😢🔒🚫"
               name="frame.denied"
+              defaultValue="Denied part of the frame."
               required
             />
             <small className="text-slate-500">
@@ -90,6 +94,7 @@ export const Form = () => {
                 className="select select-bordered w-full max-w-xs"
                 name="frame.gate.network"
                 required
+                defaultValue={CHAIN_ID}
               >
                 {Object.keys(networks)
                   .filter((i) => {
@@ -110,11 +115,16 @@ export const Form = () => {
                 className="select select-bordered w-full max-w-xs"
                 name="frame.gate.type"
                 required
+                defaultValue={"ERC721"}
                 onChange={(evt) => {
                   setShowTokenId(evt.target.value === "ERC1155");
                 }}
               >
-                {["ERC721", "ERC20", "ERC1155"].map((contractType) => {
+                {[
+                  "ERC721",
+                  // "ERC20", // TODO: Uncomment after releasing https://github.com/nucypher/taco-web/pull/498
+                  // "ERC1155" // TODO: Not supported in TACo
+                ].map((contractType) => {
                   return (
                     <option key={contractType} value={contractType}>
                       {contractType}
@@ -151,6 +161,7 @@ export const Form = () => {
               className="input "
               placeholder="0x..."
               name="frame.gate.contract"
+              defaultValue={LOCK_NFT_ADDR}
               required
             />
           </div>

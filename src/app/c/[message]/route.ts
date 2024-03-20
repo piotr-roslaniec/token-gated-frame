@@ -3,8 +3,9 @@ import { getMessage } from "@/lib/messages";
 
 export async function GET(
   request: Request,
-  { params }: { params: { message: string } }
+  { params }: { params: { message: string } },
 ) {
+  console.log("GET /c/[message]/route", { params });
   const u = new URL(request.url);
 
   const message = await getMessage(params.message);
@@ -22,6 +23,6 @@ export async function GET(
         label: "Reveal 🔓",
         action: "post",
       },
-    ]
+    ],
   );
 }

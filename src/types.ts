@@ -1,16 +1,5 @@
 import { UUID } from "crypto";
-import {
-  ColumnType,
-  Generated,
-  Insertable,
-  JSONColumnType,
-  Selectable,
-  Updateable,
-} from "kysely";
-
-export interface Database {
-  frames: FrameTable;
-}
+import { ColumnType, Generated, JSONColumnType, Selectable } from "kysely";
 
 export interface FrameFields {
   body: string;
@@ -36,5 +25,3 @@ export interface FrameTable {
 }
 
 export type Frame = Selectable<FrameTable>;
-export type NewFrame = Insertable<FrameTable>;
-export type FrameUpdate = Updateable<FrameTable>;

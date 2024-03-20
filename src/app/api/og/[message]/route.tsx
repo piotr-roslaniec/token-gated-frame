@@ -4,8 +4,9 @@ import { ImageResponse } from "@vercel/og";
 
 export async function GET(
   request: Request,
-  { params }: { params: { message: string } }
+  { params }: { params: { message: string } },
 ) {
+  console.log("GET /api/og", { params });
   const u = new URL(request.url);
   let content = "";
   if (u.searchParams.get("state") === "no-wallet") {

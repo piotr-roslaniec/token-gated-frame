@@ -3,8 +3,9 @@ import { renderMessageForFid } from "./render";
 
 export async function POST(
   request: Request,
-  { params }: { params: { message: string } }
+  { params }: { params: { message: string } },
 ) {
+  console.log("POST /api", { params });
   const u = new URL(request.url);
   const body = await request.json();
   const { trustedData } = body;
@@ -19,14 +20,15 @@ export async function POST(
   return renderMessageForFid(
     u.origin,
     params.message,
-    fcMessage.message.data.fid
+    fcMessage.message.data.fid,
   );
 }
 
 export async function GET(
   request: Request,
-  { params }: { params: { message: string } }
+  { params }: { params: { message: string } },
 ) {
+  console.log("GET /api", { params });
   const u = new URL(request.url);
   if (u.origin !== "http://localhost:3000") {
     return new Response("Invalid origin", { status: 443 });

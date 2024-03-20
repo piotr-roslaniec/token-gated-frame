@@ -11,12 +11,14 @@ interface Button {
 export const renderMessageForFid = async (
   origin: string,
   messageId: string,
-  fid?: string | null
+  fid?: string | null,
 ) => {
+  console.log("renderMessageForFid", { origin, messageId, fid });
   const message = await getMessage(messageId);
   if (!message) {
     return new Response("Message not found", { status: 404 });
   }
+  console.log({ message, fid });
 
   if (!fid) {
     return render(origin, message, "pending", `${origin}/api/${message.id}/`, [
@@ -37,9 +39,9 @@ export const renderMessageForFid = async (
       addresses.map((userAddress: string) => {
         return meetsRequirement(
           userAddress as `0x${string}`,
-          message.frame.gate
+          message.frame.gate,
         );
-      })
+      }),
     )
   ).some((balance) => !!balance);
 
@@ -58,7 +60,7 @@ export const renderMessageForFid = async (
           label: "Get the tokens!",
           action: "post_redirect",
         },
-      ]
+      ],
     );
   } else {
     // No checkout button!
@@ -71,23 +73,27 @@ export const render = async (
   message: { id: string; author: string; frame: any },
   status: "pending" | "hidden" | "clear" | "no-wallet",
   postUrl?: string,
-  buttons?: Button[]
+  buttons?: Button[],
 ) => {
+  console.log("render", { base, message, status, postUrl, buttons });
   const image = getImage(base, message, status);
   return new Response(
     `<!DOCTYPE html>
     <html>
       <head>
         <meta name="description" content="${message.frame.description}">
+<!--        <meta name="body" content="${message.frame.body}">-->
         
         <meta property="og:title" content="${message.frame.title}">
         <meta property="og:description" content="${message.frame.description}">
+<!--        <meta property="og:body" content="${message.frame.body}">-->
         <meta property="og:url" content="${base}/c/${message.id}">
         <meta property="og:image" content="${base}/api/og/${message.id}">
         <meta property="og:type" content="website">
 
         <meta name="twitter:card" content="summary_large_image">
         <meta name="twitter:description" content="${message.frame.description}">
+<!--        <meta name="twitter:body" content="${message.frame.body}">-->
         <meta name="twitter:image" content="${base}/api/og/${message.id}">
 
         <meta property="fc:frame" content="vNext" />
@@ -103,8 +109,8 @@ export const render = async (
               button.label
             }" />
               <meta property="fc:frame:button:${i + 1}:action" content="${
-              button.action
-            }" />`;
+                button.action
+              }" />`;
           })
           .join("\n")}
       </head>
@@ -113,8 +119,8 @@ export const render = async (
         <img style="border: 2px solid #000; border-radius: 10px;" src="${image}" />
         <p>
           <a style="display: inline-block; padding: 10px 20px; font-size: 16px; cursor: pointer; text-align: center; text-decoration: none; color: #ffffff; background-color: #007bff; border: none; border-radius: 5px;" href="https://warpcast.com/~/compose?text=Check%20this%20frame!&embeds[]=${base}/c/${
-      message.id
-    }" target="_blank">Cast-it</a>
+            message.id
+          }" target="_blank">Cast-it</a>
         </p>
       </body>
     </html>`,
@@ -123,6 +129,6 @@ export const render = async (
         "Content-Type": "text/html",
       },
       status: 200,
-    }
+    },
   );
 };

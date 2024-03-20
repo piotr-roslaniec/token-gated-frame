@@ -1,7 +1,7 @@
 export const getImage = (
   base: string,
   message: { id: string },
-  state = "pending"
+  state = "pending",
 ) => {
   const u = new URL(`${base}/api/og/${message.id}`);
   if (state !== "pending") {
